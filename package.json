@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "FSA and RSAA compliant middleware for Redux to debounce actions.",
   "license": "MIT",
-  "repository": "commitd/redux-debounce",
+  "repository": "commitd/redux-middleware-debounce",
   "author": {
-    "name": "Jonathan Elliot",
+    "name": "Jon Elliot",
     "email": "jon@committed.software",
-    "url": "committed.software"
+    "url": "http://committed.software"
   },
   "main": "lib/index.js",
   "engines": {

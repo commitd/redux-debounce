@@ -103,14 +103,14 @@ See [lodash][lodash-url] for the rest of the supported options.
 
 ## License
 
-Copyright © 2016 [Committed Software](committed.software)
+Copyright © 2016 [Committed Software](http://committed.software)
 
 Original examples and test code Copyright © 2015-2016 [Neil Kistner](//github.com/wyze). Released under the MIT license. See [license](license) for details.
 
 [lodash-url]: https://lodash.com/docs#debounce
 
 [travis-image]: https://img.shields.io/travis/commitd/redux-middleware-debounce.svg?style=flat-square
-[travis-url]: https://travis-ci.org/wyze/redux-middleware-debounce
+[travis-url]: https://travis-ci.org/commitd/redux-middleware-debounce
 
 [npm-image]: https://img.shields.io/npm/v/redux-middleware-debounce.svg?style=flat-square
 [npm-url]: https://npmjs.com/package/redux-middleware-debounce
