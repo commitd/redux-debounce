@@ -2,7 +2,6 @@
 
 [![Build Status][travis-image]][travis-url]
 [![npm][npm-image]][npm-url]
-[![Codecov.io][codecov-image]][codecov-url]
 
 > FSA-compliant middleware for Redux to debounce actions. Based on [redux-debounce](https://github.com/wyze/redux-debounce) with added support for [RSAAs (Redux Standard Api Actions)](https://www.npmjs.com/package/redux-api-middleware#redux-standard-api-calling-actions) and fine-grained configuration.
 
@@ -114,6 +113,3 @@ Original examples and test code Copyright © 2015-2016 [Neil Kistner](//github.c
 
 [npm-image]: https://img.shields.io/npm/v/redux-middleware-debounce.svg?style=flat-square
 [npm-url]: https://npmjs.com/package/redux-middleware-debounce
-
-[codecov-image]: https://img.shields.io/codecov/c/github/commitd/redux-middleware-debounce.svg?style=flat-square
-[codecov-url]: https://codecov.io/github/commitd/redux-middleware-debounce
