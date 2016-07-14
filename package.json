@@ -1,13 +1,13 @@
 {
-  "name": "redux-debounce",
-  "version": "1.0.1",
-  "description": "FSA-compliant middleware for Redux to debounce actions.",
+  "name": "redux-middleware-debounce",
+  "version": "1.0.0",
+  "description": "FSA and RSAA compliant middleware for Redux to debounce actions.",
   "license": "MIT",
-  "repository": "wyze/redux-debounce",
+  "repository": "commitd/redux-debounce",
   "author": {
-    "name": "Neil Kistner",
-    "email": "neil.kistner@gmail.com",
-    "url": "neilkistner.com"
+    "name": "Jonathan Elliot",
+    "email": "jon@committed.software",
+    "url": "committed.software"
   },
   "main": "lib/index.js",
   "engines": {
