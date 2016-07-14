@@ -13,7 +13,9 @@ const reducer = ( state = initialState, action = {} ) => {
 
 export const input = payload => ({
   meta: {
-    debounce: 'simple',
+    debounce: {
+      wait: 100
+    },
   },
   payload,
   type: INPUT,

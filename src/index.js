@@ -1,32 +1,37 @@
+import { debounce } from 'lodash'
 import { isFSA } from 'flux-standard-action'
-import debounce from 'lodash.debounce'
-import mapValues from 'lodash.mapvalues'
 
-const debounceMiddleware = ( config = {} ) => () => next => {
-  const debouncers = mapValues(config, option => {
-    if ( typeof option === 'number' ) {
-      return debounce(next, option)
-    }
+const debouncers = new Map()
 
-    const { wait = 0, ...options } = option
+function getDebouncer(key, options, next) {
+  let debouncer = debouncers.get(key)
 
-    return debounce(next, wait, options)
-  })
-
-  return action => {
-    if ( !isFSA(action) ) {
-      return next(action)
-    }
-
-    const { meta = {} } = action
-    const debouncer = debouncers[meta.debounce]
-
-    if ( debouncer ) {
-      return debouncer(action)
-    }
-
-    return next(action)
+  if ( !debouncer ) {
+    debouncer = debounce(next, options.wait || 0, options)
+    debouncers.set(key, debouncer)
   }
+
+  return debouncer
 }
+
+const debounceMiddleware = () => next => action => {
+  let debouncer
+  const nextAction = Object.assign({}, action)
+
+  if ( isFSA(action) && action.meta && action.meta.debounce ) {
+    debouncer = getDebouncer(action.type, action.meta.debounce, next)
+  }
+
+  let result
+
+  if ( debouncer ) {
+    result = debouncer(nextAction)
+  } else {
+    result = next(nextAction)
+  }
+
+  return result
+}
+
 
 export default debounceMiddleware

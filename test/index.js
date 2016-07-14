@@ -3,11 +3,15 @@ import debounceMiddleware from '../src'
 import test from 'ava'
 
 const config = {
-  simple: 100,
-  nowait: {},
-  maxwait: { wait: 100, maxWait: 150 },
+  wait: 100,
 }
-const nextHandler = debounceMiddleware(config)()
+
+const configMaxWait = {
+  wait: 100,
+  maxWait: 150,
+}
+
+const nextHandler = debounceMiddleware()
 
 test('returns a function to handle next', t => {
   t.is(typeof nextHandler, 'function')
@@ -32,26 +36,10 @@ test('calls next when not flux standard action', t => {
   t.truthy(next.calledWith({ id: 1 }))
 })
 
-test.cb('calls debounce when config is passed a number', t => {
-  const next = spy()
-  const actionHandler = nextHandler(next)
-  const action = { type: 'TEST', meta: { debounce: 'simple' } }
-
-  actionHandler(action)
-
-  t.falsy(next.called)
-
-  setTimeout(() => {
-    t.truthy(next.called)
-    t.truthy(next.calledWith(action))
-    t.end()
-  }, 105)
-})
-
 test.cb('only calls debounced function once', t => {
   const next = spy()
   const actionHandler = nextHandler(next)
-  const action = { type: 'TEST', meta: { debounce: 'simple' } }
+  const action = { type: 'TEST', meta: { debounce: config } }
 
   actionHandler(action)
   actionHandler(action)
@@ -60,26 +48,13 @@ test.cb('only calls debounced function once', t => {
   setTimeout(() => {
     t.is(next.callCount, 1)
     t.end()
-  }, 105)
-})
-
-test.cb('supports an object passed as config to debounce', t => {
-  const next = spy()
-  const actionHandler = nextHandler(next)
-  const action = { type: 'TEST', meta: { debounce: 'nowait' } }
-
-  actionHandler(action)
-
-  setTimeout(() => {
-    t.truthy(next.called)
-    t.end()
-  }, 100)
+  }, 200)
 })
 
 test.cb('supports other lodash.debounce options', t => {
   const next = spy()
   const actionHandler = nextHandler(next)
-  const action = { type: 'TEST', meta: { debounce: 'maxwait' } }
+  const action = { type: 'TEST_MAX_WAIT', meta: { debounce: configMaxWait } }
 
   actionHandler(action)
 
@@ -94,14 +69,5 @@ test.cb('supports other lodash.debounce options', t => {
   setTimeout(() => {
     t.truthy(next.called)
     t.end()
-  }, 155)
-})
-
-test('skips debounce if not passed matching key', t => {
-  const next = spy()
-  const actionHandler = nextHandler(next)
-  const action = { type: 'TEST', meta: { debounce: 'nomatch' } }
-
-  actionHandler(action)
-  t.truthy(next.called)
+  }, 200)
 })
