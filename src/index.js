@@ -1,5 +1,16 @@
+import { CALL_API } from 'redux-api-middleware'
 import { debounce } from 'lodash'
 import { isFSA } from 'flux-standard-action'
+
+let isRSAA
+
+try {
+  const reduxApiMiddleware = require('redux-api-middleware')
+
+  isRSAA = reduxApiMiddleware.isRSAA
+} catch (requireError) {
+  isRSAA = null
+}
 
 const debouncers = new Map()
 
@@ -18,7 +29,14 @@ const debounceMiddleware = () => next => action => {
   let debouncer
   const nextAction = Object.assign({}, action)
 
-  if ( isFSA(action) && action.meta && action.meta.debounce ) {
+  if ( isRSAA && isRSAA(action)
+      && action[CALL_API].meta
+      && action[CALL_API].meta.debounce ) {
+    debouncer = getDebouncer(
+      action[CALL_API].endpoint,
+      action[CALL_API].meta.debounce, next)
+    delete nextAction[CALL_API].meta
+  } else if ( isFSA(action) && action.meta && action.meta.debounce ) {
     debouncer = getDebouncer(action.type, action.meta.debounce, next)
   }
 

@@ -1,3 +1,4 @@
+import { CALL_API } from 'redux-api-middleware'
 import { spy } from 'sinon'
 import debounceMiddleware from '../src'
 import test from 'ava'
@@ -70,4 +71,27 @@ test.cb('supports other lodash.debounce options', t => {
     t.truthy(next.called)
     t.end()
   }, 200)
+})
+
+test.cb('debounces api middleware', t => {
+  const next = spy()
+  const actionHandler = nextHandler(next)
+
+  const apiAction = {
+    [CALL_API]: {
+      endpoint: '/api/to/call',
+      method: 'POST',
+      types: [ 'Request', 'Set', 'Error' ],
+      meta: {
+        debounce: config,
+      },
+    },
+  }
+
+  actionHandler(apiAction)
+
+  setTimeout(() => {
+    t.falsy(next.called)
+    t.end()
+  }, 75)
 })
