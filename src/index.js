@@ -1,6 +1,6 @@
 import { CALL_API } from 'redux-api-middleware'
-import debounce from 'lodash.debounce'
 import { isFSA } from 'flux-standard-action'
+import debounce from 'lodash.debounce'
 
 let isRSAA
 
