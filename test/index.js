@@ -95,3 +95,17 @@ test.cb('debounces api middleware', t => {
     t.end()
   }, 75)
 })
+
+test.cb('supports string constant actions', t => {
+  const next = spy()
+  const actionHandler = nextHandler(next)
+  const action = 'STRINGY'
+
+  actionHandler(action)
+
+  setTimeout(() => {
+    t.is(next.callCount, 1)
+    t.true(next.calledWith(action))
+    t.end()
+  }, 50)
+})

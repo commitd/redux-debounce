@@ -27,7 +27,7 @@ function getDebouncer(key, options, next) {
 
 const debounceMiddleware = () => next => action => {
   let debouncer
-  const nextAction = Object.assign({}, action)
+  let nextAction = action
 
   if ( isRSAA && isRSAA(action)
       && action[CALL_API].meta
@@ -35,6 +35,7 @@ const debounceMiddleware = () => next => action => {
     debouncer = getDebouncer(
       action[CALL_API].endpoint,
       action[CALL_API].meta.debounce, next)
+    nextAction = Object.assign({}, action)
     delete nextAction[CALL_API].meta
   } else if ( isFSA(action) && action.meta && action.meta.debounce ) {
     debouncer = getDebouncer(action.type, action.meta.debounce, next)
