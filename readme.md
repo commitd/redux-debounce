@@ -16,14 +16,13 @@ $ npm install --save-dev redux-middleware-debounce
 ```javascript
 // Store setup
 import { applyMiddleware, createStore } from 'redux'
-import createDebounce from 'redux-middleware-debounce'
+import debounce from 'redux-middleware-debounce'
 import createLogger from 'redux-logger'
 import promise from 'redux-promise'
 import thunk from 'redux-thunk'
 
-const debouncer = createDebounce()
 const logger = createLogger()
-const createMiddleware = applyMiddleware(thunk, debouncer, promise, thunk)
+const createMiddleware = applyMiddleware(thunk, debounce, promise, thunk)
 const store = createMiddleware(createStore)(reducer)
 
 const debounceAction = () => ({
@@ -36,7 +35,7 @@ const debounceAction = () => ({
 })
 ```
 
-Debounce middleware **should be** placed near the top of the chain.
+Debounce middleware **should be** placed near the top of the chain. It must be placed before redux-api-middleware (if it is used, redux-api-middleware is an optional dependency).
 
 ### Example
 
