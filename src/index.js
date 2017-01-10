@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import { CALL_API } from 'redux-api-middleware'
 import { isFSA } from 'flux-standard-action'
 import debounce from 'lodash.debounce'
