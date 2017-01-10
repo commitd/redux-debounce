@@ -3,15 +3,17 @@
 [![Build Status][travis-image]][travis-url]
 [![npm][npm-image]][npm-url]
 
-> FSA-compliant middleware for Redux to debounce actions. Based on [redux-debounce](https://github.com/wyze/redux-debounce) with added support for [RSAAs (Redux Standard Api Actions)](https://www.npmjs.com/package/redux-api-middleware#redux-standard-api-calling-actions) and fine-grained configuration.
+> FSA-compliant middleware for Redux to debounce actions. Based on [redux-debounce](https://github.com/wyze/redux-debounce)
 
 ## Installation
 
 ```sh
-$ npm install --save-dev redux-middleware-debounce
+$ npm install --save redux-middleware-debounce
 ```
 
 ## Usage
+
+Simply add a debounce property to any Flux Standard Action (or any object-based action) like so:
 
 ```javascript
 // Store setup
@@ -22,82 +24,37 @@ import promise from 'redux-promise'
 import thunk from 'redux-thunk'
 
 const logger = createLogger()
-const createMiddleware = applyMiddleware(thunk, debounce, promise, thunk)
+const createMiddleware = applyMiddleware(debounce)
 const store = createMiddleware(createStore)(reducer)
 
 const debounceAction = () => ({
-  meta: {
-    debounce: {
-      wait: 100
-    },
-  },
   type: 'TEST',
+  debounce: {
+    wait: 100
+  },
 })
 ```
 
-Debounce middleware **should be** placed near the top of the chain. It must be placed before redux-api-middleware (if it is used, redux-api-middleware is an optional dependency).
+Debounce middleware **should be** placed near the top of the chain, that way the debounce property will be stripped in time for other middlewares that validate, such as redux-api-middleware
 
-### Example
-
-See the example directory.
-
-```sh
-$ cd example
-$ npm install
-$ npm start
-```
-
-## API
-
-`redux-middleware-debounce` exposes single constructor function for creating debounce middleware.
-
-> createDebounce()
-
-To actually debounce an action, supply meta.debounce to an FSA:
-
-```javascript
-var MY_ACTION = {
-  type: 'MINE',
-  meta : {
-    debounce : {
-      wait: 100
-    }
-  }
-}
-```
-
-Or to a [RSAA (Redux Standard Api Action)](https://www.npmjs.com/package/redux-api-middleware#redux-standard-api-calling-actions):
-
-```javascript
-var MY_API_ACTION = {
-  [CALL_API]: {
-    endpoint: '/api/mine',
-    method 'GET':
-    types:['REQUEST', 'SET', 'GET']
-    meta : {
-      debounce : {
-        wait: 100
-      }
-    }
-  }
-}
-```
 
 ### Options
 
-> **Each option is a property to setup different debounces for different actions.**
+All Lodash debounce() options are supported:
 
-#### action.meta.debounce (Object)
+See [lodash][lodash-url]
 
-##### wait (Number)
-
-Number of milliseconds to debounce the action for.
-
-##### maxWait (Number)
-
-Maximum number of milliseconds before the action is called.
-
-See [lodash][lodash-url] for the rest of the supported options.
+```
+const debounceAction = () => ({
+  type: 'TEST',
+  debounce: {
+    wait: 100,
+    options: {
+      maxWait: 1000
+    }
+  },
+})
+```
 
 ## License
 

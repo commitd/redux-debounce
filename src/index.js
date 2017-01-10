@@ -1,57 +1,37 @@
-/* eslint-disable global-require */
-import { CALL_API } from 'redux-api-middleware'
-import { isFSA } from 'flux-standard-action'
 import debounce from 'lodash.debounce'
 
-let isRSAA
+const debouncers = {}
 
-try {
-  const reduxApiMiddleware = require('redux-api-middleware')
-
-  isRSAA = reduxApiMiddleware.isRSAA
-} catch (requireError) {
-  isRSAA = null
-}
-
-const debouncers = new Map()
-
-function getDebouncer(key, options, next) {
-  let debouncer = debouncers.get(key)
-
-  if ( !debouncer ) {
-    debouncer = debounce(next, options.wait || 0, options)
-    debouncers.set(key, debouncer)
+function getDebouncer(key, wait, options, func) {
+  let debouncer
+  if(debouncers.hasOwnProperty(key)){
+    debouncer = debouncers[key]
+  } else {
+    debouncer = debounce(func, wait, options)
+    debouncers[key] = debouncer
   }
-
   return debouncer
 }
 
-const debounceMiddleware = () => next => action => {
-  let debouncer
-  let nextAction = action
-
-  if ( isRSAA && isRSAA(action)
-      && action[CALL_API].meta
-      && action[CALL_API].meta.debounce ) {
-    debouncer = getDebouncer(
-      action[CALL_API].endpoint,
-      action[CALL_API].meta.debounce, next)
-    nextAction = Object.assign({}, action)
-    delete nextAction[CALL_API].meta
-  } else if ( isFSA(action) && action.meta && action.meta.debounce ) {
-    debouncer = getDebouncer(action.type, action.meta.debounce, next)
+function validate(key, wait){
+  if(key == null){
+    throw new Error('action.debounce missing key property')
   }
-
-  let result
-
-  if ( debouncer ) {
-    result = debouncer(nextAction)
-  } else {
-    result = next(nextAction)
+  if(wait == null){
+    throw new Error('action.debounce missing wait property')
   }
-
-  return result
 }
 
+export const debounceMiddleware = store => next => action => {
+  if(!action.debounce){
+    return next(action)
+  }
 
-export default debounceMiddleware
+  const { key, wait, options } = action.debounce
+  validate(key, wait)
+  const debouncer = getDebouncer(key, wait, options, next)
+
+  const newAction = Object.assign({}, action)
+  delete newAction.debounce
+  return debouncer(newAction)
+}

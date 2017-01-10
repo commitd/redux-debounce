@@ -1,26 +1,18 @@
 import { CALL_API } from 'redux-api-middleware'
 import { spy } from 'sinon'
-import debounceMiddleware from '../src'
+import { debounceMiddleware } from '../src'
 import test from 'ava'
 
-const config = {
-  wait: 100,
-}
-
-const configMaxWait = {
-  wait: 100,
-  maxWait: 150,
-}
-
-const nextHandler = debounceMiddleware()
+const wait = 1000
 
 test('returns a function to handle next', t => {
-  t.is(typeof nextHandler, 'function')
-  t.is(nextHandler.length, 1)
+  t.is(typeof debounceMiddleware(), 'function')
+  t.is(debounceMiddleware().length, 1)
 })
 
 test('handle next returns function to handle action', t => {
-  const actionHandler = nextHandler(spy())
+  const middleware = debounceMiddleware()
+  const actionHandler = middleware(spy())
 
   t.is(typeof actionHandler, 'function')
   t.is(actionHandler.length, 1)
@@ -28,7 +20,8 @@ test('handle next returns function to handle action', t => {
 
 test('calls next when not flux standard action', t => {
   const next = spy()
-  const actionHandler = nextHandler(next)
+  const middleware = debounceMiddleware()
+  const actionHandler = middleware(next)
   const action = { id: 1 }
 
   actionHandler(action)
@@ -39,8 +32,15 @@ test('calls next when not flux standard action', t => {
 
 test.cb('only calls debounced function once', t => {
   const next = spy()
-  const actionHandler = nextHandler(next)
-  const action = { type: 'TEST', meta: { debounce: config } }
+  const middleware = debounceMiddleware()
+  const actionHandler = middleware(next)
+  const action = {
+    type: 'TEST',
+    debounce: {
+      key: 'debounceKey1',
+      wait
+    }
+  }
 
   actionHandler(action)
   actionHandler(action)
@@ -49,43 +49,67 @@ test.cb('only calls debounced function once', t => {
   setTimeout(() => {
     t.is(next.callCount, 1)
     t.end()
-  }, 200)
+  }, wait*2)
 })
 
-test.cb('supports other lodash.debounce options', t => {
+test.cb('supports other lodash.debounce maxWait option', t => {
   const next = spy()
-  const actionHandler = nextHandler(next)
-  const action = { type: 'TEST_MAX_WAIT', meta: { debounce: configMaxWait } }
+  const middleware = debounceMiddleware()
+  const actionHandler = middleware(next)
+  const action = {
+    type: 'TEST_MAX_WAIT',
+    debounce: {
+      key: 'debounceKey2',
+      wait: 500,
+      options: {
+        maxWait: 1000
+      }
+    }
+  }
 
   actionHandler(action)
 
   setTimeout(() => {
     actionHandler(action)
-  }, 75)
+  }, 100)
+
+  setTimeout(() => {
+    actionHandler(action)
+  }, 200)
+
+  setTimeout(() => {
+    actionHandler(action)
+  }, 300)
+
+  setTimeout(() => {
+    actionHandler(action)
+  }, 400)
 
   setTimeout(() => {
     t.falsy(next.called)
-  }, 100)
+  }, 500)
 
   setTimeout(() => {
     t.truthy(next.called)
     t.end()
-  }, 200)
+  }, 10000)
 })
 
 test.cb('debounces api middleware', t => {
   const next = spy()
-  const actionHandler = nextHandler(next)
+  const middleware = debounceMiddleware()
+  const actionHandler = middleware(next)
 
   const apiAction = {
     [CALL_API]: {
       endpoint: '/api/to/call',
       method: 'POST',
       types: [ 'Request', 'Set', 'Error' ],
-      meta: {
-        debounce: config,
-      },
     },
+    debounce: {
+      key: 'debounceKey3',
+      wait
+    }
   }
 
   actionHandler(apiAction)
@@ -98,7 +122,7 @@ test.cb('debounces api middleware', t => {
 
 test.cb('supports string constant actions', t => {
   const next = spy()
-  const actionHandler = nextHandler(next)
+  const actionHandler = debounceMiddleware()(next)
   const action = 'STRINGY'
 
   actionHandler(action)
