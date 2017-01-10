@@ -1,6 +1,6 @@
 {
   "name": "redux-middleware-debounce",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "FSA and RSAA compliant middleware for Redux to debounce actions.",
   "license": "MIT",
   "repository": "commitd/redux-middleware-debounce",
