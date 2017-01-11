@@ -1,4 +1,12 @@
 language: node_js
 node_js:
-  - "stable"
-  - "4"
+  - stable
+  - '4'
+deploy:
+  api_key:
+    secure: H9ndwxz+f5AlM9yL2Rr0EzOS5uWNS8+zZaAdhsgawaIhqfb1GJJi4K2pIUvQY5expnVIHP1bTRf53zXOb6lU5iW6t/lgGakFWO8ojy8owd/tQIXolK+dtkQCYxqU7bysMdLwGjItcq8vLqYVzOfCBIGox19AGhG4D6ENOWi1kkNFOzP8abA/r5i80hJrw7PAC2T4f/6OLPjuTzeIZfjZeM0GATqkivh4YFJrnzs8zumzhC7aXHFUWPN71UHZwMIzwLc5DZyTPOmwlmnIYJVoRyj+CsNV8idtoruZ57siGY0S/KLWtvhEFjLXaxsXvUT8FqS+kf0ICTVlF/4da36FgYDh2SiGJa5giLJ6vzJSjSL/8j87yrCX2c4vJn/5+Zrq9Ef977BbTAndaGl/mrrugJY7lCwCs4eOfpfZalHDUBRiCd+U+1BsgetvmBsNj/Zp4PPlYzz9WMRP17VQoj3vq1aMVxQ7/YlP8LT31iu7+SqoheVcvwaxllxzsPHDGareR9WRomw1RRRYzAaD8d2tVAcntUphcYl6HpQ6n4ozpWY2p2hM+iXA2qTk3dFOSaQSoUyrEUqPdqpeeV8xC31zMwULXjQQh2ca7GvruY7I2fSWY8TTp9+dqRYaMhF+RJYpeDKtjxPmQk3dGfwlhFtXULfuQiccvhhUvUmlW4Py/f4=
+  email: "jon@committed.software"
+  on:
+    tags: true
+  provider: npm
+  skip_cleanup: true
