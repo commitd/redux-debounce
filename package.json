@@ -19,6 +19,7 @@
     "coverage": "nyc report -r text-lcov | codecov",
     "lint": "eslint src test",
     "prebuild": "npm run lint",
+    "prepublish": "npm run build",
     "pretest": "npm run clean && npm run build",
     "test": "nyc ava",
     "test:watch": "npm test -- --watch"
