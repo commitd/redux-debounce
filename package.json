@@ -54,12 +54,7 @@
     "flux"
   ],
   "dependencies": {
-    "flux-standard-action": "^1.0.0",
-    "lodash.debounce": "^4.0.6",
-    "lodash.mapvalues": "^4.3.0"
-  },
-  "optionalDependencies": {
-    "redux-api-middleware": "^1.0.2"
+    "lodash.debounce": "^4.0.6"
   },
   "devDependencies": {
     "ava": "^0.17.0",
@@ -72,6 +67,7 @@
     "eslint": "^3.8.1",
     "eslint-config-react-app": "^0.5.0",
     "eslint-plugin-flowtype": "^2.21.0",
+    "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.4.1",
     "nyc": "^10.0.0",
