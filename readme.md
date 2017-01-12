@@ -18,13 +18,13 @@ Simply add a debounce property to any Flux Standard Action (or any object-based 
 ```javascript
 // Store setup
 import { applyMiddleware, createStore } from 'redux'
-import debounce from 'redux-middleware-debounce'
+import { debounceMiddleware } from 'redux-middleware-debounce'
 import createLogger from 'redux-logger'
 import promise from 'redux-promise'
 import thunk from 'redux-thunk'
 
 const logger = createLogger()
-const createMiddleware = applyMiddleware(debounce)
+const createMiddleware = applyMiddleware(debounceMiddleware)
 const store = createMiddleware(createStore)(reducer)
 
 const debounceAction = () => ({
