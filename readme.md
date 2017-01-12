@@ -48,6 +48,7 @@ See [lodash][lodash-url]
 const debounceAction = () => ({
   type: 'TEST',
   debounce: {
+    key: 'uniqueKey',    
     wait: 100,
     options: {
       maxWait: 1000
